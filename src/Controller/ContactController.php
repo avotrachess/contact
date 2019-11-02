@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller;
 
-use App\Controllers\ControllerInterface;
+use App\Controller\ControllerInterface;
 use InvalidArgumentException;
 use Exception;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class ContactController extends MainController implements ControllerInterface
+class ContactController extends AbstractController implements ControllerInterface
 {
     /** @var int $userId */
     protected $userId;
@@ -14,15 +17,17 @@ class ContactController extends MainController implements ControllerInterface
     /**
      * ContactController constructor.
      */
-    public function __construct()
+    public function __construct(SessionInterface $session)
     {
-        parent::__construct();
+        // parent::__construct();
 
-        $this->userId = $_SESSION['auth']['id'];
+        $this->userId = $session->getId();
     }
 
     /**
      * Affichage de la liste des contacts de l'utilisateur connecté
+     * 
+     * @Route("/", name="contact_list")
      */
     public function index()
     {
@@ -30,15 +35,23 @@ class ContactController extends MainController implements ControllerInterface
         if (!empty($this->userId)) {
             $contacts = $this->Contact->getContactByUser($this->userId);
         }
-        echo $this->twig->render('index.html.twig', ['contacts' => $contacts]);
+
+        return $this->render('index.html.twig', ['contacts' => $contacts]);
     }
 
     /**
      * Ajout d'un contact
+     * 
+     * @Route("/contact/add", name="contact_add")
      */
     public function add()
     {
         $error = false;
+        $data = [
+            'nom' => '',
+            'prenom' => '',
+            'email' => '',
+        ];
         if (!empty($_POST)) {
             $response = $this->sanitize($_POST);
             if ($response["response"]) {
@@ -49,13 +62,13 @@ class ContactController extends MainController implements ControllerInterface
                     'userId' => $this->userId
                 ]);
                 if ($result) {
-                    header('Location: /index.php?p=contact.index');
+                    return $this->redirectToRoute('contact_list');
                 }
             } else {
                 $error = true;
             }
         }
-        echo $this->twig->render('add.html.twig', ['error' => $error]);
+        return $this->render('add.html.twig', ['error' => $error, 'data' => $data]);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller;
 
 use App;
 use App\Components\Auth\Auth;
@@ -17,10 +17,10 @@ class MainController
      */
     public function __construct()
     {
-        $this->loader = new \Twig_Loader_Filesystem(ROOT . '/src/Views');
-        $this->twig   = new \Twig_Environment($this->loader);
+        // $this->loader = new \Twig_Loader_Filesystem(ROOT . '/src/Views');
+        // $this->twig   = new \Twig_Environment($this->loader);
         $this->auth   = new Auth(App::getInstance()->getDatabase());
-        $this->twig->addGlobal('session', $_SESSION);
+        // $this->twig->addGlobal('session', $_SESSION);
     }
 
     /**

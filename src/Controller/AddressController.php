@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller;
 
-use App\Controllers\ControllerInterface;
+use App\Controller\ControllerInterface;
 
 class AddressController extends MainController implements ControllerInterface
 {
@@ -136,7 +136,7 @@ class AddressController extends MainController implements ControllerInterface
      *
      * @return array
      */
-    public function sanitize($data = [])
+    public function sanitize(array $data = []): array
     {
         $number     = $_POST['number'];
         $city       = strtoupper($_POST['city']);

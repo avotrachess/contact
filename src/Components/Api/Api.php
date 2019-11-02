@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Components;
-use App\Components\Api\ApiService;
+use App\Components\CustomApi\ApiService;
 
 class Api extends ApiService
 {

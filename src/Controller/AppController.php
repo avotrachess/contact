@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controller;
 
-use App\Controllers\MainController;
+use App\Controller\MainController;
 use Components\Auth\auth;
 
 class AppController extends MainController

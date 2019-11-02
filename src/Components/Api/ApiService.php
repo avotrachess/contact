@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Components\Api;
+namespace App\Components\CustomApi;
 
 class ApiService
 {
