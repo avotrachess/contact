@@ -17,7 +17,7 @@ class MainController
      */
     public function __construct()
     {
-        $this->loader = new \Twig_Loader_Filesystem(ROOT . '/app/Views');
+        $this->loader = new \Twig_Loader_Filesystem(ROOT . '/src/Views');
         $this->twig   = new \Twig_Environment($this->loader);
         $this->auth   = new Auth(App::getInstance()->getDatabase());
         $this->twig->addGlobal('session', $_SESSION);
