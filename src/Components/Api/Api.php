@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Components;
-use App\Components\CustomApi\ApiService;
+namespace App\Components\Api;
 
-class Api extends ApiService
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class Api
 {
     /**
      * Palindrome
@@ -11,7 +13,7 @@ class Api extends ApiService
     public function palindrome()
     {
         if ($this->getRequestMethod() != "POST") {
-            $this->response('', 406);
+            return new JsonResponse('', 406);
         }
 
         $name = $this->request['name'];
@@ -36,17 +38,17 @@ class Api extends ApiService
     public function email()
     {
         if ($this->getRequestMethod() != "POST") {
-            $this->response('', 406);
+            return new JsonResponse('', 406);
         }
         $email = $this->_request['email'];
         if ($email) {
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->response($this->json([
+                return new JsonResponse($this->json([
                     "response" => true,
                     "message"  => "L'email est au bon format"
                 ]), 200);
             } else {
-                $this->response($this->json([
+                return new JsonResponse($this->json([
                     "response" => false,
                     "message"  => "Le format de l'email n'est pas correct"
                 ]), 200);
@@ -69,6 +71,3 @@ class Api extends ApiService
 
     }
 }
-
-$api = new Api();
-$api->processApi();

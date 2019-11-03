@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use App\Database;
 use App\Models\AbstractModel;
 
@@ -17,7 +18,7 @@ class ContactModel extends AbstractModel
     {
         parent::__construct($database);
 
-        $this->model = new AbstractModel();
+        // $this->model = new AbstractModel();
     }
 
     /**

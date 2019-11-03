@@ -19,16 +19,16 @@ class Database
 
     /**
      * Database constructor.
-     * @param $dbName
+     * @param string $dbName
      * @param string $dbUser
      * @param string $dbPass
      * @param string $dbHost
      */
     public function __construct(
-        $dbName,
-        $dbUser = 'root',
-        $dbPass = 'root',
-        $dbHost = 'localhost'
+        string $dbName,
+        string $dbUser = 'root',
+        string $dbPass = 'root',
+        string $dbHost = 'localhost'
     ) {
         $this->dbName = $dbName;
         $this->dbUser = $dbUser;

@@ -8,20 +8,24 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Models\ContactModel;
 
 class ContactController extends AbstractController implements ControllerInterface
 {
     /** @var int $userId */
     protected $userId;
 
+    /** @var ContactModel $contact */
+    protected $contact;
+
     /**
      * ContactController constructor.
      */
-    public function __construct(SessionInterface $session)
+    public function __construct(ContactModel $contact)
     {
-        // parent::__construct();
-
-        $this->userId = $session->getId();
+        //1 pour le utilisateur pour tester
+        $this->userId = 1;
+        $this->contact = $contact;
     }
 
     /**
@@ -33,7 +37,7 @@ class ContactController extends AbstractController implements ControllerInterfac
     {
         $contacts = [];
         if (!empty($this->userId)) {
-            $contacts = $this->Contact->getContactByUser($this->userId);
+            $contacts = $this->contact->getContactByUser($this->userId);
         }
 
         return $this->render('index.html.twig', ['contacts' => $contacts]);
@@ -55,7 +59,7 @@ class ContactController extends AbstractController implements ControllerInterfac
         if (!empty($_POST)) {
             $response = $this->sanitize($_POST);
             if ($response["response"]) {
-                $result = $this->Contact->create([
+                $result = $this->contact->create([
                     'nom'    => $response['nom'],
                     'prenom' => $response['prenom'],
                     'email'  => $response['email'],
@@ -84,7 +88,7 @@ class ContactController extends AbstractController implements ControllerInterfac
      */
     public function delete()
     {
-        $result = $this->Contact->delete($_GET['id']);
+        $result = $this->contact->delete($_GET['id']);
         if ($result) {
             header('Location: /index.php?p=contact.index');
         }
