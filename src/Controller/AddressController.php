@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\ControllerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class AddressController extends MainController implements ControllerInterface
 {
@@ -35,7 +36,7 @@ class AddressController extends MainController implements ControllerInterface
     /**
      * Ajout d'adresse pour un contact
      */
-    public function add()
+    public function add(Request $request)
     {
         $error = false;
         $id = intval($_GET['id']);

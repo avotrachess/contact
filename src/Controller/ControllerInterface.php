@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+
 interface ControllerInterface
 {
     /**
@@ -12,7 +14,7 @@ interface ControllerInterface
     /**
      * Methode pour page de creation
      */
-    public function add();
+    public function add(Request $request);
 
     /**
      * Methode pour page de modification

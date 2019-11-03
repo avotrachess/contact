@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Models\ContactModel;
+use Symfony\Component\HttpFoundation\Request;
 
 class ContactController extends AbstractController implements ControllerInterface
 {
@@ -48,16 +49,17 @@ class ContactController extends AbstractController implements ControllerInterfac
      * 
      * @Route("/contact/add", name="contact_add")
      */
-    public function add()
+    public function add(Request $request)
     {
         $error = false;
         $data = [
-            'nom' => '',
-            'prenom' => '',
-            'email' => '',
+            'nom' => $request->request->get('nom') ,
+            'prenom' => $request->request->get('prenom') ,
+            'email' => $request->request->get('email'),
         ];
-        if (!empty($_POST)) {
-            $response = $this->sanitize($_POST);
+
+        if (!is_null($data['nom']) && !is_null($data['prenom']) && !is_null($data['email'])) {
+            $response = $this->sanitize($data);
             if ($response["response"]) {
                 $result = $this->contact->create([
                     'nom'    => $response['nom'],
@@ -102,6 +104,10 @@ class ContactController extends AbstractController implements ControllerInterfac
      */
     public function sanitize(array $data = []): array
     {
+        $prenom = strtoupper($data['prenom']);
+        $nom    = strtoupper($data['nom']);
+        $email  = strtolower($data['email']);
+
         if (empty($nom)) {
             throw new Exception('Le nom est obligatoire');
         }
@@ -115,10 +121,6 @@ class ContactController extends AbstractController implements ControllerInterfac
         } elseif (filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new InvalidArgumentException('Le format de l\'email est invalide');
         }
-
-        $prenom = strtoupper($data['prenom']);
-        $nom    = strtoupper($data['nom']);
-        $email  = strtolower($data['email']);
 
         $isPalindrome = $this->apiClient('palindrome', ['name' => $nom]);
         $isEmail = $this->apiClient('email', ['email' => $email]);
