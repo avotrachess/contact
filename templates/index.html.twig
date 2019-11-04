@@ -23,9 +23,9 @@
             {% for contact in contacts %}
                 <tr>
                     <td>{{ contact.id|e }}</td>
-                    <td>{{ contact.nom|e }}</td>
-                    <td>{{ contact.prenom|e }}</td>
-                    <td>{{ contact.email|e }}</td>
+                    <td>{{ contact.nom|capitalize }}</td>
+                    <td>{{ contact.prenom|capitalize }}</td>
+                    <td>{{ contact.email|lower }}</td>
                     <td class="text-center">
                         <a class='btn btn-info btn-xs' href="/public/index.php?p=address.index/{{ contact.id }}"><span
                                     class="glyphicon glyphicon-edit"></span> Adresses</a>

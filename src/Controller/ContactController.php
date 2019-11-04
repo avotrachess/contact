@@ -31,7 +31,7 @@ class ContactController extends AbstractController implements ControllerInterfac
      */
     public function __construct(ContactModel $contact, ApiService $apiService)
     {
-        //1 pour le utilisateur pour tester
+        //1 pour le utilisateur pour tester car pas d'authentification
         $this->userId = 1;
         $this->contact = $contact;
         $this->apiService = $apiService;
@@ -70,9 +70,9 @@ class ContactController extends AbstractController implements ControllerInterfac
             $response = $this->sanitize($data);
             if ($response["response"]) {
                 $result = $this->contact->create([
-                    'nom'    => $response['nom'],
-                    'prenom' => $response['prenom'],
-                    'email'  => $response['email'],
+                    'nom'    => ucfirst($response['nom']),
+                    'prenom' => ucfirst($response['prenom']),
+                    'email'  => strtolower($response['email']),
                     'userId' => $this->userId
                 ]);
                 if ($result) {
