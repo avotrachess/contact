@@ -76,17 +76,17 @@ class Api extends AbstractController
             ]);
         }
 
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if ($this->apiService->isEmail($email)) {
             return new JsonResponse([
                 "response" => true,
                 "message"  => "L'email est au bon format"
             ]);
-        } else {
-            return new JsonResponse([
-                "response" => false,
-                "email" => $email,
-                "message"  => "Le format de l'email n'est pas correct"
-            ]);
         }
+
+        return new JsonResponse([
+            "response" => false,
+            "email" => $email,
+            "message"  => "Le format de l'email n'est pas correct"
+        ]);
     }
 }

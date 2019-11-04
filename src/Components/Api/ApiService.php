@@ -35,10 +35,6 @@ class ApiService
      */
     public function isPalindrome(string $name): bool
     {
-        if (!$name) {
-            return false;
-        }
-
         $this->logger->info('Service isPalindrome');
 
         $palindrome = $this->factory::create($name);
@@ -54,10 +50,6 @@ class ApiService
      */
     public function isEmail(string $email): bool
     {
-        if (!$email) {
-            return false;
-        }
-
         $this->logger->info('Service isEmail');
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
