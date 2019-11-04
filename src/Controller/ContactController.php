@@ -87,10 +87,58 @@ class ContactController extends AbstractController implements ControllerInterfac
 
     /**
      * Modification d'un contact
+     * 
+     * @Route("/contact/edit/{id}", name="contact_edit")
+     * 
+     * @param Request $request
+     * @param int     $id
+     * 
      */
-    public function edit()
+    public function edit(Request $request, int $id)
     {
-        //@todo
+        $contact = $this->contact->findById($id);
+
+        if (!$contact) {
+            return $this->redirectToRoute('contact_list');
+        }
+        
+        $error = false;
+
+        $data = [
+            'id' => $contact->id,
+            'nom' => $contact->nom,
+            'prenom' => $contact->prenom,
+            'email' => $contact->email,
+            'userId' => $contact->userId,
+        ];
+
+        if (!is_null($request->request->get('nom'))
+            && !is_null($request->request->get('prenom'))
+            && !is_null($request->request->get('email'))) {
+            $data['nom'] = $request->request->get('nom');
+            $data['prenom'] = $request->request->get('prenom');
+            $data['email'] = $request->request->get('email');
+
+            $response = $this->sanitize($data);
+            if ($response["response"]) {
+                $result = $this->contact->update(
+                    $data['id'], 
+                    [
+                        'nom'    => ucfirst($response['nom']),
+                        'prenom' => ucfirst($response['prenom']),
+                        'email'  => strtolower($response['email']),
+                        'userId' => $this->userId
+                    ]
+                );
+                if ($result) {
+                    return $this->redirectToRoute('contact_list');
+                }
+            } else {
+                $error = true;
+            }
+        }
+
+        return $this->render('add.html.twig', ['error' => $error, 'data' => $data]);
     }
 
     /**
@@ -132,7 +180,7 @@ class ContactController extends AbstractController implements ControllerInterfac
         $isFirstNamePalindrome = $this->apiService->isPalindrome($prenom);
         $isEmail = $this->apiService->isEmail($email);
 
-        if ((!$isPalindrome) && $isEmail && (!$isFirstNamePalindrome)) {
+        if ((!$isLastNamePalindrome) && $isEmail && (!$isFirstNamePalindrome)) {
             return [
                 'response' => true,
                 'email'    => $email,
