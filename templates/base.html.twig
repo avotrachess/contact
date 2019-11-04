@@ -78,6 +78,31 @@
 
     });
 
+    $("#prenom").focusout(function () {
+        var prenom = $('#prenom').val();
+        if(prenom){
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:1025/api/palindrome',
+                data: {
+                    'name': prenom
+                },
+                success: function (res) {
+                    if (res.response != true) {
+                        $('#alert').show();
+                        $('#firstNameStatus').empty().append("<span class='text-success'>- Le prénom est valide</span>");
+                    } else {
+                        $('#alert').show();
+                        $('#firstNameStatus').empty().append("<span class='text-danger'>- Le prénom du contact ne peut pas être un palindrome</span>");
+                    }
+                }
+            });
+        } else {
+            $('#firstNameStatus').empty().append("<span class='text-danger'>- Le prénom du contact ne peut être nul </span>");
+        }
+
+    });
+
     $("#checkEmail").click(function () {
         var email = $('#email').val();
         if(email){

@@ -128,10 +128,11 @@ class ContactController extends AbstractController implements ControllerInterfac
             throw new Exception('Le email est obligatoire');
         }
 
-        $isPalindrome = $this->apiService->isPalindrome($nom);
+        $isLastNamePalindrome = $this->apiService->isPalindrome($nom);
+        $isFirstNamePalindrome = $this->apiService->isPalindrome($prenom);
         $isEmail = $this->apiService->isEmail($email);
 
-        if ((!$isPalindrome) && $isEmail && $prenom) {
+        if ((!$isPalindrome) && $isEmail && (!$isFirstNamePalindrome)) {
             return [
                 'response' => true,
                 'email'    => $email,
