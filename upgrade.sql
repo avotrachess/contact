@@ -46,6 +46,14 @@ ALTER TABLE `contacts`
   ADD CONSTRAINT `contacts_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
+-- Sql - index
+
+CREATE INDEX `idx_pname`
+ON `contacts` (`nom`, `prenom`);
+
+CREATE INDEX `idx_login`
+ON `users` (`login`);
+
 -- Sql - initialisation user de test
 
 INSERT INTO `users` (`id`, `login`, `email`, `password`) VALUES
