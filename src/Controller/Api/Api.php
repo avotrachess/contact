@@ -6,9 +6,24 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use App\Components\Api\ApiService;
 
+/**
+ * Classe Api controlleur
+ */
 class Api extends AbstractController
 {
+    /** @var ApiService $apiService */
+    protected $apiService;
+
+    /**
+     * Contructeur de Api
+     */
+    public function __construct(ApiService $apiService)
+    {
+        $this->apiService = $apiService;
+    }
+
     /**
      * Palindrome
      * 
@@ -20,24 +35,25 @@ class Api extends AbstractController
      */
     public function palindrome(Request $request): JsonResponse
     {
-        if ($this->getRequestMethod() != "POST") {
-            return new JsonResponse('', 406);
+        $name = $request->request->get('name');
+
+        if (!$name) {
+            return new JsonResponse([
+                "response" => false,
+                "message"  => "Pas de nom renseigné",
+            ]);
         }
 
-        $name = $this->request['name'];
-        // TODO ecrire un objet palindrome
-        //$palindrome = new Palindrome($name);
-
-        if ($name) {
-            // TODO ecrire la methode isValid() de l'objet palindrome et la tester avec PHPUnit
-            /*
-            if ($palindrome->isValid()) {
-                $this->response($this->json(["response" => true]), 200);
-            } else {
-                $this->response($this->json(["response" => false]), 200);
-            }
-            */
+        if ($this->apiService->isPalindrome($name)) {
+            return new JsonResponse([
+                "response" => true,
+                "message" => "Le nom est un palindrome",
+            ]);
         }
+
+        return new JsonResponse([
+            "response" => false,
+        ]);
     }
 
     /**
