@@ -10,7 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Models\ContactModel;
 use Symfony\Component\HttpFoundation\Request;
+use App\Components\Api\ApiService;
 
+/**
+ * Class ContactController
+ */
 class ContactController extends AbstractController implements ControllerInterface
 {
     /** @var int $userId */
@@ -19,14 +23,18 @@ class ContactController extends AbstractController implements ControllerInterfac
     /** @var ContactModel $contact */
     protected $contact;
 
+    /** @var ApiService $apiService */
+    protected $apiService;
+
     /**
      * ContactController constructor.
      */
-    public function __construct(ContactModel $contact)
+    public function __construct(ContactModel $contact, ApiService $apiService)
     {
         //1 pour le utilisateur pour tester
         $this->userId = 1;
         $this->contact = $contact;
+        $this->apiService = $apiService;
     }
 
     /**
@@ -118,13 +126,12 @@ class ContactController extends AbstractController implements ControllerInterfac
 
         if (empty($email)) {
             throw new Exception('Le email est obligatoire');
-        } elseif (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException('Le format de l\'email est invalide');
         }
 
-        $isPalindrome = $this->apiClient('palindrome', ['name' => $nom]);
-        $isEmail = $this->apiClient('email', ['email' => $email]);
-        if ((!$isPalindrome->response) && $isEmail->response && $prenom) {
+        $isPalindrome = $this->apiService->isPalindrome($nom);
+        $isEmail = $this->apiService->isEmail($email);
+
+        if ((!$isPalindrome) && $isEmail && $prenom) {
             return [
                 'response' => true,
                 'email'    => $email,
@@ -132,5 +139,12 @@ class ContactController extends AbstractController implements ControllerInterfac
                 'nom'      => $nom
             ];
         }
+
+        return [
+            'response' => false,
+            'email'    => $email,
+            'prenom'   => $prenom,
+            'nom'      => $nom
+        ];
     }
 }

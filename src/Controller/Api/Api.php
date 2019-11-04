@@ -11,8 +11,14 @@ class Api extends AbstractController
 {
     /**
      * Palindrome
+     * 
+     * @Route("/api/palindrome", methods={"POST"})
+     * 
+     * @param Request $request
+     * 
+     * @return JsonResponse
      */
-    public function palindrome()
+    public function palindrome(Request $request): JsonResponse
     {
         if ($this->getRequestMethod() != "POST") {
             return new JsonResponse('', 406);
